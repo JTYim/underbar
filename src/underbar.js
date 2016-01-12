@@ -204,12 +204,11 @@
     return _.reduce(collection, function(acc, item, i, col){
       if(item === undefined) {
         acc = false;
-      }      
-      if(acc===false){
-        acc = !!iterator(item,i,coll)
+      }else if(acc===false){
+        acc = !!iterator(item,i,col);
       }
       return acc;
-    }, false)
+    }, false);
 
   };
 
@@ -233,11 +232,25 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    _.each(args, function(e,i,arr){
+      _.each(e, function(v, k, coll){
+        obj[k] = v;
+      });
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    _.each(args, function(e,i,arr){
+      _.each(e, function(v, k, coll){
+        !(k in obj) && ( obj[k] = v )
+      });
+    });
+    return obj;
   };
 
 
